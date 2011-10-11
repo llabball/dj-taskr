@@ -2,12 +2,14 @@
 <html> 
   <head> 
     <meta http-equiv="content-type" content="text/html;charset=utf-8"> 
-    <title>Tasks — as a couch app</title> 
+    <title>Tasks with data.js — as a couch app</title> 
     
+    <!-- the server.js seeds something in the placeholder
     <script>
       var seed = {{{{seed}}}};
       var session = {{{{session}}}};
     </script>
+    -->
     
     <script type="text/x-ejs-template" name="project">
       <div id="projects">
@@ -51,10 +53,11 @@
     <!-- App -->
     <script type="text/javascript" src="/javascripts/app.js"></script>
     
-    <style type="text/css">
-      @import url("/stylesheets/reset.css");
-      @import url("/stylesheets/application.css");
-    </style>
+    <link rel="stylesheet" href="style/reset.css" type="text/css">
+    <link rel="stylesheet" href="style/application.css" type="text/css">
+
+
+
   </head>
   <body>
     <div id="sync_state" style="position: absolute; top: 20px; left: 600px"></div>
