@@ -1,0 +1,6 @@
+{
+  "couchdb_url": "http://localhost:5984/datajs-tasks",
+  "server_host": null,
+  "server_port": 3004,
+  "secret": "lalala"
+}
