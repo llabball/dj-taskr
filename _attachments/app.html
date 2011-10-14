@@ -10,66 +10,31 @@
       var session = {{{{session}}}};
     </script>
     -->
-    
-    <script type="text/x-ejs-template" name="project">
-      <div id="projects">
-        
-        <% graph.find({type: "/type/project"}).each(function(p) { %>
-          <a href="" class="load-project<%= p._id === project._id ? " active" : "" %>" project="<%= p._id %>"><%= p.get('name') %></a>
-        <% }); %>
-        <a href="#" class="create-project">+</a>
-      </div>
       
-      <div>
-        <h1><%= project.get('name') %></h1>
-        
-        <div id="new_task">
-          <form id="new_task_form">
-            <input type="text" name="task_name" id="task_name"/>
-            <input type="submited" value="Add Task"/>
-          </form>
-        </div>
-        
-        <div id="tasks-container">
-          <% project.get('tasks').each(function(task, key) { %>
-            <div class="task<%= task.get('complete') ? " complete" : ""%>" task="<%= key %>">
-              <div class="checkbox"></div>
-              <a href="#" class="remove" title="Remove Task"></a>
-              <div class="title"><input type="text" value="<%= task.get('name') %>"/> </div>
-              <div class="revision">_rev: <%= task._rev ? task._rev : "" %> <%= task._dirty ? '<span class="tag">pending</span>' : '' %></div>
-            </div>
-          <% }); %>
-        </div>
-      </div>
-    </script>
-    
-    <!-- Libs -->
-    <script type="text/javascript" src="/javascripts/jquery.js"></script>
-    <script type="text/javascript" src="/javascripts/underscore.js"></script>
-    <script type="text/javascript" src="/javascripts/backbone.js"></script>
-    <script type="text/javascript" src="/nowjs/now.js"></script>
-    <script type="text/javascript" src="/datajs/data.js"></script>
-    
-    <!-- App -->
-    <script type="text/javascript" src="/javascripts/app.js"></script>
-    
     <link rel="stylesheet" href="style/reset.css" type="text/css">
     <link rel="stylesheet" href="style/application.css" type="text/css">
-
-
 
   </head>
   <body>
     <div id="sync_state" style="position: absolute; top: 20px; left: 600px"></div>
     <div id="container">
-      <div id="actions">
-        <a href="#" class="start-sync">Sync</a>
-        <a href="#" class="reset">Reset</a>
-      </div>
+      <div id="actions"></div>
       
       <div id="project">
       </div>
     </div>
     
   </body> 
+
+  <script type="text/javascript" src="/javascripts/app.js"></script>
+  <script src="vendor/couchapp/loader.js"></script>
+  <script type="text/javascript" charset="utf-8">
+    $.couch.app(function(app) {
+      $("#sync_state").evently("sync_state", app);
+      $("#actions").evently("actions", app);
+      //$.evently.connect("#account","#profile", ["loggedIn","loggedOut"]);
+      $("#project").evently("project", app);
+    });
+  </script>
+
 </html>
