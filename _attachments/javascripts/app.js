@@ -231,7 +231,7 @@ var Application = Backbone.View.extend({
     return this;
   }
 });
-
+/*
 var app, router;
 var graph = new Data.Graph(seed, {dirty: false, persistent: true}).connect('ajax');
 
@@ -257,3 +257,4 @@ var graph = new Data.Graph(seed, {dirty: false, persistent: true}).connect('ajax
     });
   });
 })();
+*/

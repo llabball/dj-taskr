@@ -1629,7 +1629,7 @@
 
 Data.Adapters["ajax"] = function(graph, config) {  
   
-  config = config ? config :Â {url: '/graph/'};
+  config = config ? config : {url: '/graph/'};
   
   // write
   // --------------

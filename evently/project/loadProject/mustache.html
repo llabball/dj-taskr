@@ -1,0 +1,28 @@
+<div id="projects">
+  {{#projects}}
+    <a href="#" class="load-project" project="{{_id}}">{{name}}</a>
+  {{/projects}}
+    <a href="#" class="create-project">+</a>
+</div>
+
+<div>
+  <h1>{{projecttitle}}</h1>
+  
+  <div id="new_task">
+    <form id="new_task_form">
+      <input type="text" name="task_name" id="task_name"/>
+      <input type="submited" value="Add Task"/>
+    </form>
+  </div>
+  
+  <div id="tasks-container">
+    {{#tasks}}
+      <div class="task" task="{{_id}}">
+        <div class="checkbox"></div>
+        <a href="#" class="remove" title="Remove Task"></a>
+        <div class="title"><input type="text" value="{{name}}"/> </div>
+        <div class="revision">_rev: {{_rev}}</div>
+      </div>
+    {{/tasks}}
+  </div>
+</div>
