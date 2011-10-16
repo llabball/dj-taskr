@@ -55,9 +55,9 @@ var schema =
 };
 
 
-var graph = new Data.Graph(schema, {dirty: true});
+var graph = new Data.Graph(schema, {dirty: true, persistent: true});
 
-$$("#project").graph = graph;
+$$("#project").graph = graph.get("/type/task").toJSON();
 
 
   return {

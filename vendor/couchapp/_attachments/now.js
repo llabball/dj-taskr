@@ -531,7 +531,7 @@
     };
 
     var dependencies = [
-      { key: 'io', path: '/socket.io/socket.io.js'}
+      { key: 'io', path: 'vendor/couchapp/socket.io.js'}
     ];
     var dependenciesLoaded = 0;
 
