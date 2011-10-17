@@ -1,75 +1,54 @@
-function(e) {
-  
-var schema =
+function(data) {
 
-  { 
-  "/type/project": {
-    "_id": "/type/project",
-    "type": "/type/type",
-    "name": "Project",
-    "properties": {
-      "name": {
-        "name": "Name",
-        "unique": true,
-        "type": "string",
-        "required": true
-      },
-      "tasks": {
-        "name": "Tasks",
-        "unique": false,
-        "sync": true,
-        "type": ["/type/task"]
-      }
-    },
-    "indexes": {
-      "key": ["creator", "name"],
-      "creator": ["creator"]
-    }
-  },
-  
-  "/type/task": {
-    "_id": "/type/task",
-    "type": "/type/type",
-    "name": "Task",
-    "properties": {
-      "name": {
-        "name": "Task Name",
-        "unique": true,
-        "type": "string"
-      },
-      "complete": {
-        "name": "Complete",
-        "unique": true,
-        "type": "boolean"
-      },
-      "project": {
-        "name": "Project Membership",
-        "unique": true,
-        "type": "/type/project"
-      }
-    },
-    "indexes": {
-      "project": ["project"]
-    }
-  }
-};
+	var currentproject = null
+		, projects = []
+		,	schema = {};
+
+	//iterate over the result of the query.js
+	data.rows.map(function(remotedoc) {
+	  var typesofdoc = remotedoc.value.type;
+	  if($.isArray(typesofdoc)) {
+		  for (var i = 0; i < typesofdoc.length; i++) {		//iterate over types array and find projects
+		  	if(typesofdoc[i] === "/type/project") {
+		  	  projects.push(remotedoc.value);							//remember project for showing in the user view
+		  	  if (currentproject === null) {
+		  	  	currentproject = remotedoc.value;					//take the first project as current
+		  	  }	  
+				} 
+		  }
+		} else {
+		 	if(typesofdoc === "/type/type") {
+				schema[remotedoc.value._id] = remotedoc.value;
+			}
+		} 
+	});
+
+	//initilize data.js graph
+	var graph = new Data.Graph(schema, {dirty: true, persistent: true});
+
+	//graph.set(projects);											 //push projects to the graph
+	  
+	$$("#project").graph = graph;											//store the data.js graph in the widget state
+	$$("#project").schema = schema;
+	$$("#project").pros = [];
+	graph
+		.find({"type&=": ["/type/project"]})						//find the tasks of the current project in the graph
+		.each(function(val, key, index) { 
+	  	$$("#project").pros.push(val.toJSON());											//and remember them for showing in the user view
+		});
 
 
-var graph = new Data.Graph(schema, {dirty: true, persistent: true});
+	var tasks = [];
+	
+	graph
+		.find({project: currentproject._id})						//find the tasks of the current project in the graph
+		.each(function(val, key, index) { 
+	  	tasks.push(val.toJSON());											//and remember them for showing in the user view
+		});
 
-$$("#project").graph = graph.get("/type/task").toJSON();
-
-
-  return {
-    projecttitle: "Project 2",
-    projects: [
-    	{_id:"12345",name:"Project 1"},
-    	{_id:"67890",name:"Project 2"}
-    ],
-    tasks: [
-    	{_id:"t1",name:"cleaning",_rev:"1121212"},
-    	{_id:"t2",name:"cocking",_rev:"4353543"},
-    	{_id:"t3",name:"washing",_rev:"456456"}
-    ]
+	return {																					//return the actually visible data to the layout template
+    projecttitle: currentproject.name,
+    projects: projects,
+    tasks: tasks
   };
 }
