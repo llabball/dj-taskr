@@ -1,18 +1,33 @@
 function(data) {
 
 	var	schema = {};
+	var docs = {}
+	
+	data.rows.map(function(remotedoc) {											//iterate over the result of the query.js 
+	  var typesofdoc = remotedoc.value.type;	
+	  
+	  if($.isArray(typesofdoc)) {						
+			
+			for (var i = 0; i < typesofdoc.length; i++) {				
+				if(typesofdoc[i] === "/type/task" ||	typesofdoc[i] === "/type/project") {					
+					docs[remotedoc.value._id] = remotedoc.value;		//insert docs of type == task|project to the graph
+				}
+			}
 
-	data.rows.map(function(remotedoc) {											//iterate over the result of the query.js and build 
-	  var typesofdoc = remotedoc.value.type;								//the schema with docs of type == type
-	  if(typesofdoc === "/type/type") {
-			schema[remotedoc.value._id] = remotedoc.value;
-		}
+		} else if(typesofdoc === "/type/type") {
+			
+			schema[remotedoc.value._id] = remotedoc.value;			//and build the schema with docs of type == type
+		
+		}																											//TODO: may the better way is to get the schema (commonjs?)
 	});
 
 	var graph = new Data.Graph(schema, {										//initilize data.js graph with the schema
-		dirty: true, 																					//cant explain why the nodes then are already there
 		persistent: true
 	});
+
+	graph.empty();																					//reseting the local storage
+
+	graph.merge(docs);																			//merge the doc with state "_dirty: undefined"
 	  
 	$$("#project").graph = graph;														//store the data.js graph in the widget state
 }

@@ -20,7 +20,10 @@ function(data, params) {
 		});
 
 	graph
-		.find({project: currentproject._id})									//find the tasks of the current project in the graph
+		.find({																								//find the tasks of the current project in the graph
+			"project": currentproject._id,
+			"_deleted!=": true
+		})												
 		.each(function(val, key, index) { 
 	  	tasks.push(val.toJSON());														//and remember them for showing in the user view
 		});
