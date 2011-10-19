@@ -2,6 +2,8 @@ function(data) {
 
 	var	schema = {};
 	var docs = {}
+
+	localStorage.clear();																		//reseting the local storage
 	
 	data.rows.map(function(remotedoc) {											//iterate over the result of the query.js 
 	  var typesofdoc = remotedoc.value.type;	
@@ -25,9 +27,7 @@ function(data) {
 		persistent: true
 	});
 
-	graph.empty();																					//reseting the local storage
-
 	graph.merge(docs);																			//merge the doc with state "_dirty: undefined"
-	  
+		  
 	$$("#project").graph = graph;														//store the data.js graph in the widget state
 }

@@ -11,9 +11,6 @@ function (e) {
 			
 			task.name = name;
 			graph.set(task);
-
-			console.log($$("#project").graph
-										.get(taskid));
 		}
 
 	}

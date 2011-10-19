@@ -25,7 +25,14 @@ function(data, params) {
 			"_deleted!=": true
 		})												
 		.each(function(val, key, index) { 
-	  	tasks.push(val.toJSON());														//and remember them for showing in the user view
+	  	var valobj = val.toJSON();
+	  	if(valobj.complete === true) {
+	  		valobj.completed = 'complete';
+	  	}
+	  	if(val._dirty === true) {
+	  		valobj.pending = '<span class="tag">pending</span>';
+	  	}
+	  	tasks.push(valobj);																	//and remember them for showing in the user view
 		});
 
 	return {																								//return data to the layout template
