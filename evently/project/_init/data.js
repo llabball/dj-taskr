@@ -30,4 +30,11 @@ function(data) {
 	graph.merge(docs);																			//merge the doc with state "_dirty: undefined"
 		  
 	$$("#project").graph = graph;														//store the data.js graph in the widget state
+
+	graph.bind("dirty", function(node) {
+		console.log("Status changed on doc " + node + JSON.stringify(node));
+	});
+	//graph.watch('persons', {"location": "/location/springfield"}, function(err, nodes) {
+	//	console.log("Status changed on doc " + nodes);
+	//});
 }

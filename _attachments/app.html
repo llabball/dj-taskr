@@ -16,23 +16,18 @@
 
   </head>
   <body>
-    <div id="sync_state" style="position: absolute; top: 20px; left: 600px"></div>
     <div id="container">
-      <div id="actions"></div>
-      
-      <div id="project">
-      </div>
+      <div id="sync_state" style="position: absolute; top: 20px; left: 600px"></div>
+      <div id="actions"></div>      
+      <div id="project"></div>
     </div>
     
   </body> 
 
   <script src="vendor/couchapp/loader.js"></script>
-  <script type="text/javascript" src="javascripts/app.js"></script>
   <script type="text/javascript" charset="utf-8">
     $.couch.app(function(app) {
-      $("#sync_state").evently("sync_state", app);
       $("#actions").evently("actions", app);
-      //$.evently.connect("#account","#profile", ["loggedIn","loggedOut"]);
       $("#project").evently("project", app);
     });
   </script>

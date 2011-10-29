@@ -6,7 +6,7 @@ function(data, params) {
 		, graph = $$("#project").graph;
 
 	graph
-		.find({"type&=": ["/type/project"]})									//find the projects in the graph and mark the
+		.find({"type&=": ["/type/project"]})									//find the projects in the graph
 		.each(function(val, key, index) { 										
 	  	var obj = val.toJSON();
 	  	if((params.projectid && params.projectid === obj._id)
