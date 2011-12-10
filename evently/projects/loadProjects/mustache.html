@@ -1,0 +1,23 @@
+<div id="projects-container">
+  {{#projects}}
+    <a href="#" class="load-project {{guistate}}" project="{{_id}}">{{name}}</a>
+  {{/projects}}
+    <a href="#" class="create-project">+</a>
+</div>
+
+<div id="buttons-container">
+  <a href="#" class="realtime-sync">Realtime Sync</a>
+	<a href="#" class="start-sync">Sync Once</a>
+	<a href="#" class="reset">Reset</a>
+</div>
+
+<div style="clear:both;"></div>
+
+<div>
+  <span style="font-size: 200%;line-height: 2;">{{projecttitle}}</span>
+  <span id="messagebox" style="float:right;line-height: 4;font-size: 100%;padding-right: 2%;"></span>
+  <div id="new_task">
+    <input type="text" name="task_name" id="task_name"/>
+    <input type="submit" value="Add Task"/>
+  </div>
+</div>

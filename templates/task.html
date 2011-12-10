@@ -1,0 +1,31 @@
+<div class="task {{#completed}}complete{{/completed}}" task="{{_id}}" 
+  {{#conflicted}} style="display:inline-block;width:46%" {{/conflicted}}>
+  
+  <div class="checkbox"></div>
+  <a href="#" class="remove" title="Remove Task"></a>
+  <div class="title"><input type="text" value="{{name}}"/> </div>
+  <div class="revision">
+    {{#pending}}<span class="tag">pending</span>{{/pending}}
+    &nbsp;
+    v-{{rev}}
+  	&nbsp;
+  	{{#conflicted}}
+  		<span class="tag action">take local</span>
+  	{{/conflicted}}
+  </div>
+</div>
+
+{{#conflicted}}
+<div class="task {{#remotecompleted}}complete{{/remotecompleted}} {{#remotedeleted}}deleted{{/remotedeleted}}"
+     remotetask="{{_id}}"
+     style="display:inline-block;width:46%;float:right">
+  
+  <div class="checkbox"></div>
+  <div class="title"><input type="text" readonly="readonly" value="{{remotename}}"/> </div>
+  <div class="revision">
+    v-{{remoterev}}
+    &nbsp;
+    <span class="tag action">take remote</span>
+  </div>
+</div>
+{{/conflicted}}

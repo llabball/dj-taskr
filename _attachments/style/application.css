@@ -35,8 +35,12 @@ h1 {
 }
 
 
-#projects {
-  height: 50px;
+#projects-container {
+  float: left;
+  /*height: 50px;*/
+}
+#buttons-container {
+  float: right;
 }
 
 #projects a, #actions a {
@@ -68,7 +72,7 @@ h1 {
 #container {
   position:relative;
   padding:20px;
-  width: 800px;
+  /*width: 800px;*/
   margin: auto;
 }
 
@@ -238,6 +242,10 @@ input[type=submit] {
 
 .task.complete .checkbox:active {
   background: transparent url(assets/sprites.png) no-repeat -10px -160px;
+}
+
+.task.deleted input {
+  border-color:red;
 }
 
 .task.group {   min-height:45px;  }
