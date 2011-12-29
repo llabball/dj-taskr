@@ -1,4 +1,5 @@
 function(e, params) {
+//### Test the docco capabilities
 
 	var app = $$(this).app;
 	var Mustache = app.require("vendor/couchapp/lib/mustache");
@@ -161,6 +162,19 @@ function(e, params) {
 				    	indoc[taskobj._id] = taskobj;
 				    	
 				    	graph.merge(indoc,true);
+
+				    	//TODO: remove taskid from project doc on graph
+				    	/*var project = graph.get(taskobj.project);
+						var projobj = project.toJSON();
+				    	
+				    	if(!$.inArray(taskobj._id, projobj.tasks)) {
+							projobj.tasks.push(taskobj._id);
+							project.set({"tasks": projobj.tasks});
+
+							if (datawidget.currentproject._id === taskobj.project) {
+								datawidget.currentproject = projobj;
+							}
+				    	}*/
 				  	}
 				)
 		  }//addEvents

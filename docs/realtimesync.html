@@ -1,0 +1,143 @@
+<!DOCTYPE html>  <html> <head>   <title>realtimesync.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="rocco.css" /> </head> <body> <div id="navbar">     <h3>dj-taskr - The quickie-wiki Github project page generator<em></em></h3>   </div>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">           <a class="source" href="index.html">Index</a>                                           <a class="source" href="bak.html">                 bak.js               </a>                                           <a class="source" href="realtimesync.html">                 realtimesync.js               </a>                                           <a class="source" href="sync.html">                 sync.js               </a>                                           <a class="source" href="query.html">                 query.js               </a>                                           <a class="source" href="after.html">                 after.js               </a>                                           <a class="source" href="mustache.html">                 mustache.html               </a>                                           <a class="source" href="data.html">                 data.js               </a>                                           <a class="source" href="loadTasks.html">                 loadTasks.js               </a>                                           <a class="source" href="a.html">                 a.load-project               </a>                                           <a class="source" href="click.html">                 click.js               </a>                                           <a class="source" href="a.html">                 a.realtime-sync               </a>                                           <a class="source" href="click.html">                 click.js               </a>                                           <a class="source" href="a.html">                 a.reset               </a>                                           <a class="source" href="a.html">                 a.start-sync               </a>                                           <a class="source" href="click.html">                 click.js               </a>                                           <a class="source" href="click.html">                 click.js               </a>                                           <a class="source" href="mustache.html">                 mustache.html               </a>                                           <a class="source" href="data.html">                 data.js               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               realtimesync.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="nx">params</span><span class="p">)</span> <span class="p">{</span>
+
+  <span class="kd">var</span> <span class="nx">widget</span> <span class="o">=</span> <span class="nx">$$</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">upd_seq</span> <span class="o">=</span> <span class="nx">localStorage</span><span class="p">.</span><span class="nx">graph_update_seq</span><span class="p">;</span>
+
+  <span class="k">if</span><span class="p">(</span><span class="nx">params</span><span class="p">.</span><span class="nx">action</span> <span class="o">===</span> <span class="s2">&quot;start&quot;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">upd_seq</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">widget</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">db</span><span class="p">.</span><span class="nx">info</span><span class="p">({</span>
+        <span class="s2">&quot;success&quot;</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">infodoc</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">localStorage</span><span class="p">.</span><span class="nx">graph_update_seq</span> <span class="o">=</span> <span class="nx">infodoc</span><span class="p">.</span><span class="nx">update_seq</span><span class="p">;</span>
+          <span class="nx">upd_seq</span> <span class="o">=</span> <span class="nx">infodoc</span><span class="p">.</span><span class="nx">update_seq</span><span class="p">;</span>
+          <span class="nx">addRealtimeUpdates</span><span class="p">();</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">addRealtimeUpdates</span><span class="p">();</span>
+    <span class="p">}</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">params</span><span class="p">.</span><span class="nx">action</span> <span class="o">===</span> <span class="s2">&quot;stop&quot;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">widget</span><span class="p">.</span><span class="nx">changesfeed</span><span class="p">.</span><span class="nx">stop</span><span class="p">();</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;stopping realtime syncing&quot;</span><span class="p">);</span>
+  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>if (upd<em>seq &amp;&amp; upd</em>seq > 0) {</p>             </td>             <td class="code">               <div class="highlight"><pre>  
+  <span class="kd">function</span> <span class="nx">addRealtimeUpdates</span><span class="p">()</span> <span class="p">{</span> 
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;switch realtime changes feed update on (since &quot;</span> <span class="o">+</span> <span class="nx">upd_seq</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="p">);</span>
+
+    <span class="kd">var</span> <span class="nx">changesfeed</span> <span class="o">=</span> <span class="nx">widget</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">db</span><span class="p">.</span><span class="nx">changes</span><span class="p">(</span><span class="nx">upd_seq</span><span class="p">,</span> <span class="p">{</span>
+      <span class="s2">&quot;filter&quot;</span><span class="o">:</span> <span class="s2">&quot;dj-taskr/changedTasks&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;include_docs&quot;</span><span class="o">:</span> <span class="kc">true</span>
+    <span class="p">});</span>
+    <span class="nx">widget</span><span class="p">.</span><span class="nx">changesfeed</span> <span class="o">=</span> <span class="nx">changesfeed</span><span class="p">;</span>
+
+    <span class="nx">changesfeed</span><span class="p">.</span><span class="nx">onChange</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">resp</span><span class="p">)</span> <span class="p">{</span>
+      
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;#####################&quot;</span> <span class="o">+</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">resp</span><span class="p">));</span>
+
+      <span class="nx">localStorage</span><span class="p">.</span><span class="nx">graph_update_seq</span> <span class="o">=</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">last_seq</span><span class="p">;</span>
+
+      <span class="nx">resp</span><span class="p">.</span><span class="nx">results</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">upddoc</span><span class="p">)</span> <span class="p">{</span>
+          
+        <span class="kd">var</span> <span class="nx">origin</span> <span class="o">=</span> <span class="nx">widget</span><span class="p">.</span><span class="nx">graph</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">upddoc</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">origin</span> <span class="o">!==</span> <span class="kc">undefined</span> <span class="o">&amp;&amp;</span> <span class="nx">upddoc</span><span class="p">.</span><span class="nx">deleted</span> <span class="o">===</span> <span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+          
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;== del Graph Doc =====&quot;</span> <span class="o">+</span> <span class="nx">origin</span><span class="p">);</span>
+          <span class="k">if</span><span class="p">(</span><span class="nx">origin</span><span class="p">.</span><span class="nx">_dirty</span> <span class="o">===</span> <span class="kc">true</span><span class="p">)</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <p>TODO: implement the built in conflict handling (conflicted_rev)</p>             </td>             <td class="code">               <div class="highlight"><pre>            <span class="nx">origin</span><span class="p">.</span><span class="nx">_conflicted</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="nx">origin</span><span class="p">.</span><span class="nx">dataremote</span> <span class="o">=</span> <span class="nx">upddoc</span><span class="p">.</span><span class="nx">doc</span><span class="p">;</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>TODO: control, that the task reference still exists in the project doc</p>             </td>             <td class="code">               <div class="highlight"><pre>             
+          <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">widget</span><span class="p">.</span><span class="nx">graph</span><span class="p">.</span><span class="nx">del</span><span class="p">(</span><span class="nx">upddoc</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+            <span class="nx">origin</span><span class="p">.</span><span class="nx">_dirty</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+          <span class="p">}</span>
+
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+          
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;== new/update Graph Doc =====&quot;</span> <span class="o">+</span> <span class="nx">origin</span><span class="p">);</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">origin</span> <span class="o">!==</span> <span class="kc">undefined</span> <span class="o">&amp;&amp;</span> <span class="nx">origin</span><span class="p">.</span><span class="nx">data</span> <span class="o">!==</span> <span class="kc">undefined</span> <span class="o">&amp;&amp;</span> 
+            <span class="p">(</span><span class="nx">origin</span><span class="p">.</span><span class="nx">_dirty</span> <span class="o">===</span> <span class="kc">true</span> <span class="o">||</span> <span class="nx">upddoc</span><span class="p">.</span><span class="nx">doc</span><span class="p">.</span><span class="nx">_rev</span> <span class="o">&lt;</span> <span class="nx">origin</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">_rev</span><span class="p">))</span> <span class="p">{</span>
+            
+            <span class="nx">origin</span><span class="p">.</span><span class="nx">_conflicted</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span></pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>TODO: implement the built in conflict handling (conflicted_rev)</p>             </td>             <td class="code">               <div class="highlight"><pre>            <span class="nx">origin</span><span class="p">.</span><span class="nx">dataremote</span> <span class="o">=</span> <span class="nx">upddoc</span><span class="p">.</span><span class="nx">doc</span><span class="p">;</span>
+          
+          <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> 
+            </pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <p>TODO: control, that the task references of the updated project doc
+    containing the refs of conflicted tasks</p>             </td>             <td class="code">               <div class="highlight"><pre>            <span class="k">if</span><span class="p">(</span><span class="nx">upddoc</span><span class="p">.</span><span class="nx">doc</span><span class="p">.</span><span class="nx">type</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;/type/project&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+              <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;watching conflicted &quot;</span><span class="p">);</span>
+              <span class="kd">var</span> <span class="nx">conflicted_tasks</span> <span class="o">=</span> <span class="nx">widget</span><span class="p">.</span><span class="nx">graph</span><span class="p">.</span><span class="nx">dirtyNodes</span><span class="p">().</span><span class="nx">keys</span><span class="p">().</span><span class="nx">join</span><span class="p">();</span>
+              <span class="kd">var</span> <span class="nx">diff_tasks</span> <span class="o">=</span> <span class="nx">_</span><span class="p">.</span><span class="nx">difference</span><span class="p">(</span><span class="nx">origin</span><span class="p">.</span><span class="nx">tasks</span><span class="p">,</span> <span class="nx">upddoc</span><span class="p">.</span><span class="nx">doc</span><span class="p">.</span><span class="nx">tasks</span><span class="p">);</span>
+              <span class="nx">diff_tasks</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">diff_id</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">conflicted_tasks</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">diff_id</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                  <span class="nx">upddoc</span><span class="p">.</span><span class="nx">doc</span><span class="p">.</span><span class="nx">tasks</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">diff_id</span><span class="p">);</span>
+                <span class="p">}</span>
+              <span class="p">});</span>
+            <span class="p">}</span>
+
+            <span class="kd">var</span> <span class="nx">indoc</span> <span class="o">=</span> <span class="p">{};</span>
+            <span class="nx">indoc</span><span class="p">[</span><span class="nx">upddoc</span><span class="p">.</span><span class="nx">id</span><span class="p">]</span> <span class="o">=</span> <span class="nx">upddoc</span><span class="p">.</span><span class="nx">doc</span><span class="p">;</span>
+            <span class="nx">widget</span><span class="p">.</span><span class="nx">graph</span><span class="p">.</span><span class="nx">merge</span><span class="p">(</span><span class="nx">indoc</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+          <span class="p">}</span>
+
+        <span class="p">}</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="nx">upddoc</span><span class="p">.</span><span class="nx">deleted</span> <span class="o">===</span> <span class="kc">true</span> <span class="o">||</span> <span class="nx">upddoc</span><span class="p">.</span><span class="nx">doc</span><span class="p">.</span><span class="nx">type</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;/type/task&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#tasks&quot;</span><span class="p">).</span><span class="nx">trigger</span><span class="p">(</span><span class="s2">&quot;loadTasks&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;task_ids&quot;</span><span class="o">:</span> <span class="p">[</span><span class="nx">upddoc</span><span class="p">.</span><span class="nx">id</span><span class="p">]}]);</span>
+        <span class="p">}</span>
+
+      <span class="p">});</span>
+
+      <span class="cm">/*widget.app.db.view(&quot;dj-taskr/getAllProjectsAndTasks&quot;, {</span>
+<span class="cm">        &quot;keys&quot;: $.unique(resp.results.map(function(changed_doc) {</span>
+<span class="cm">          </span>
+<span class="cm">          var origin = widget.graph.get(changed_doc.id);</span>
+
+<span class="cm">          if (changed_doc.deleted === true) {</span>
+<span class="cm">            console.log(origin);</span>
+<span class="cm">            if(origin._dirty === true) {</span>
+<span class="cm">              origin._conflicted = true;</span>
+<span class="cm">              origin.dataremote = changed_doc;</span>
+<span class="cm">            } else {</span>
+<span class="cm">              widget.graph.del(changed_doc.id);</span>
+<span class="cm">              origin._dirty = false;</span>
+<span class="cm">            }</span>
+<span class="cm">            $(&quot;#tasks&quot;).trigger(&quot;loadTasks&quot;, [{&quot;task_ids&quot;:[changed_doc.id]}]);</span>
+<span class="cm">            return;</span>
+<span class="cm">          } else {</span>
+<span class="cm">            return changed_doc.id;</span>
+<span class="cm">          }</span>
+
+<span class="cm">        })),</span>
+<span class="cm">        &quot;success&quot;: function (res) {</span>
+<span class="cm">          </span>
+<span class="cm">          console.log(&quot;== new Doc =====&quot; + JSON.stringify(res));</span>
+<span class="cm">          var task_ids = [];</span>
+
+<span class="cm">          res.rows.forEach(function(upddoc,index) {</span>
+<span class="cm">            </span>
+<span class="cm">            var gdoc = widget.graph.get(upddoc.id);</span>
+<span class="cm">            console.log(&quot;== new Graph Doc =====&quot; + gdoc);</span>
+<span class="cm">            if (gdoc !== undefined &amp;&amp; gdoc.data !== undefined &amp;&amp; </span>
+<span class="cm">              (gdoc._dirty === true || upddoc.value._rev &lt; gdoc.data._rev)) {</span>
+<span class="cm">              </span>
+<span class="cm">              gdoc._conflicted = true;</span>
+<span class="cm">              gdoc.dataremote = upddoc.value;</span>
+<span class="cm">            } else { </span>
+<span class="cm">              var indoc = {};</span>
+<span class="cm">              indoc[upddoc.id] = upddoc.value;</span>
+<span class="cm">              widget.graph.merge(indoc, false);</span>
+<span class="cm">            }</span>
+<span class="cm">            </span>
+<span class="cm">            if(upddoc.value.type.indexOf(&quot;/type/task&quot;) &gt; -1) {</span>
+<span class="cm">              task_ids.push(upddoc.id); </span>
+<span class="cm">            }</span>
+
+<span class="cm">            if (index+1 == res.rows.length &amp;&amp; task_ids.length &gt; 0) {</span>
+<span class="cm">              $(&quot;#tasks&quot;).trigger(&quot;loadTasks&quot;, [{&quot;task_ids&quot;: task_ids}]);</span>
+<span class="cm">            }</span>
+
+<span class="cm">          });</span>
+
+<span class="cm">        }</span>
+<span class="cm">      });*/</span>
+      
+
+    <span class="p">});</span>
+  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <p>};</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="p">}</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

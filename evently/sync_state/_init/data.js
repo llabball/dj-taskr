@@ -34,7 +34,13 @@ function(data) {
 	graph.merge(docs);													
 		  
 	widget.graph = graph;
-	widget.currentproject = currentproject;										
+	widget.currentproject = currentproject;			
+	
+	widget.app.db.info({
+		"success": function(infodoc) {
+			localStorage.graph_update_seq = infodoc.update_seq;
+		}
+	});					
 
 	graph.bind("dirty", function(node) {
 		console.log("Status changed on doc " + node + JSON.stringify(node));
